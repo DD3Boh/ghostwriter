@@ -80,6 +80,7 @@ private slots:
     void changeFont();
     void onFontSizeChanged(int size);
     void onSetLocale();
+    void pasteImage();
     void copyHtml();
     void showPreviewOptions();
     void onAboutToHideMenuBarMenu();
