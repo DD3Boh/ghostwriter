@@ -860,7 +860,7 @@ void MainWindow::onSetLocale()
     }
 }
 
-void MainWindow::pasteImage()
+void MainWindow::paste()
 {
     MarkdownDocument *document = documentManager->document();
     QByteArray imageData;
@@ -872,8 +872,10 @@ void MainWindow::pasteImage()
     buffer.open(QIODevice::WriteOnly);
     image.save(&buffer);
 
-    // Check whether clipboard actually contains an image before running
-    if (!image.isNull()) {
+    // If clipboard isn't an image, just paste the text normally
+    if (image.isNull()) {
+        editor->paste();
+    } else {
         if (!document->isNew()) {
             startingDirectory = QFileInfo(document->filePath()).dir().path();
         }
@@ -1092,8 +1094,7 @@ void MainWindow::buildMenuBar()
     editMenu->addSeparator();
     editMenu->addAction(createWidgetAction(tr("Cu&t"), editor, SLOT(cut()), QKeySequence::Cut));
     editMenu->addAction(createWidgetAction(tr("&Copy"), editor, SLOT(copy()), QKeySequence::Copy));
-    editMenu->addAction(createWidgetAction(tr("&Paste"), editor, SLOT(paste()), QKeySequence::Paste));
-    editMenu->addAction(createWidgetAction(tr("&Paste Image"), this, SLOT(pasteImage()), QKeySequence("SHIFT+CTRL+V")));
+    editMenu->addAction(createWidgetAction(tr("&Paste"), this, SLOT(paste()), QKeySequence::Paste));
     editMenu->addAction(createWidgetAction(tr("Copy &HTML"), this, SLOT(copyHtml()), QKeySequence("SHIFT+CTRL+C")));
     editMenu->addSeparator();
     editMenu->addAction(createWidgetAction(tr("&Insert Image..."), this, SLOT(insertImage())));
