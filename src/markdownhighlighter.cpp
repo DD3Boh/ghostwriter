@@ -60,6 +60,7 @@ public:
     bool inBlockquote;
     QRegularExpression referenceDefinitionRegex;
     QRegularExpression inlineHtmlCommentRegex;
+    QRegularExpression urlValidationRegex;
     bool useLargeHeadings;
     bool useUnderlineForEmphasis;
     bool italicizeBlockquotes;
@@ -89,6 +90,7 @@ MarkdownHighlighter::MarkdownHighlighter
     setDocument(editor->document());
     d->referenceDefinitionRegex.setPattern("^\\s*\\[(.+?)[^\\\\]\\]:");
     d->inlineHtmlCommentRegex.setPattern("^\\s*<\\!--.*-->\\s*$");
+    d->urlValidationRegex.setPattern("((http|https)://)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)");
 
     connect
     (
@@ -399,6 +401,17 @@ void MarkdownHighlighterPrivate::applyFormattingForNode(const MarkdownNode *cons
 
                 break;
             case MarkdownNode::Text:
+                // If text contains a link, highlight it
+                if (urlValidationRegex.match(q->currentBlock().text()).hasMatch()) {
+                    pos = q->currentBlock().text().indexOf("http");
+                    QString link = q->currentBlock().text().mid(pos);
+                    
+                    // stop the highlight at the first whitespace
+                    length = link.indexOf(QRegularExpression("\\s+"));
+
+                    format.setForeground(colors.link);
+                    contextFormat.setForeground(colors.link);
+                }
                 break;
             case MarkdownNode::Paragraph:
                 if (MarkdownStateUnknown == state) {
