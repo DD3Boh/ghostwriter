@@ -943,6 +943,7 @@ void MainWindow::buildMenuBar()
     formatMenu->addAction(createWidgetAction(tr("&Bold"), editor, SLOT(bold()), QKeySequence::Bold));
     formatMenu->addAction(createWidgetAction(tr("&Italic"), editor, SLOT(italic()), QKeySequence::Italic));
     formatMenu->addAction(createWidgetAction(tr("Stri&kethrough"), editor, SLOT(strikethrough()), QKeySequence("Ctrl+K")));
+    formatMenu->addAction(createWidgetAction(tr("&Code Block"), editor, SLOT(insertCodeBlock()), QKeySequence("Ctrl+G")));
     formatMenu->addAction(createWidgetAction(tr("&HTML Comment"), editor, SLOT(insertComment()), QKeySequence("Ctrl+/")));
     formatMenu->addSeparator();
 

@@ -223,6 +223,12 @@ public slots:
      * Inserts strikethrough formatting.
      */
     void strikethrough();
+
+    /**
+     * Inserts Code Block.
+     */
+    void insertCodeBlock();
+
     /**
      * Inserts an HTML comment.
      */
